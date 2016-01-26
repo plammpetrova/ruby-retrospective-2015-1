@@ -1,33 +1,33 @@
-def move(snake, direction)
-  grown_up_snake = snake.dup
-  grown_up_snake.delete_at(0)
-  grow(grown_up_snake, direction)
+def move(snake, directions)
+  snake[1..-1].
+  push([snake.last[0] + directions[0], snake.last[1] + directions[1]])
 end
+
+def grow(snake, directions)
+  snake.dup.
+  push([snake.last[0] + directions[0], snake.last[1] + directions[1]])
+end
+
+def new_food(food, snake, dimensions)
+  (all_positions_available(food, snake, dimensions)).sample
+end
+
 
 def all_positions_available(food, snake, dimensions)
   all_positions(dimensions) - food - snake
 end
 
-def new_food(food, snake, dimensions)
-  (all_possitions_available(food, snake, dimensions)).sample
-end
-
-def grow(snake, direction)
-  grown_up_snake = snake.dup
-  head = grown_up_snake.last
-  grown_up_snake.push([head[0] + direction[0], head[1] + direction[1]])
-end
 
 def all_positions(dimensions)
-  width_of_field = (dimensions[:width]).pred
-  height_of_field = (dimensions[:height]).pred
-  ((0..width_of_field).to_a).product((0..height_of_field).to_a)
+  positions_x = (0...dimensions[:width]).to_a
+  positions_y = (0...dimensions[:height]).to_a
+  positions = positions_x.product(positions_y)
 end
 
-def obstacle_ahead?(snake, direction, dim)
-  next_move = (grow(snake, direction)).last
-  (snake.include? next_move) or
-  (not ((all_positions(dim)).include? next_move))
+def obstacle_ahead?(snake, directions, dimensions)
+  next_move = [snake.last[0] + directions[0], snake.last[1] + directions[1]]
+  (snake.include? next_move) ||
+  (not ((all_positions(dimensions)).include? next_move))
 end
 
 def danger?(snake, direction, dimensions)
